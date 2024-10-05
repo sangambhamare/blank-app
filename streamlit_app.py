@@ -32,7 +32,7 @@ if uploaded_file is not None:
 
     # Call the OpenAI Chat API to generate a caption using GPT-3.5 or GPT-4
     response = openai.ChatCompletion.create(
-        model="gpt-4",  # Use "gpt-4" or "gpt-3.5-turbo" for models
+        model="gpt-3.5-turbo",  # Use "gpt-4" or "gpt-3.5-turbo" for models
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
