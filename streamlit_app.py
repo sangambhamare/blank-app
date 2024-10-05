@@ -1,9 +1,14 @@
 import streamlit as st
 from PIL import Image
 import openai
+import os
+from dotenv import load_dotenv
 
-# Set your OpenAI API key here
-openai.api_key = "your-openai-api-key"
+# Load environment variables from the .env file
+load_dotenv()
+
+# Get OpenAI API key from the environment variable
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Streamlit UI
 st.title("Intelligent Caption Generator")
@@ -22,16 +27,17 @@ if uploaded_file is not None:
     # Generate a prompt to send to OpenAI GPT
     prompt = "Describe this image in a catchy social media caption and suggest some hashtags."
 
-    # Call the OpenAI API to generate a caption
-    response = openai.Completion.create(
-        engine="gpt-4",  # Use the GPT-4 or GPT-3.5 engine
-        prompt=prompt,
+    # Call the OpenAI Chat API to generate a caption using GPT-3.5 or GPT-4
+    response = openai.ChatCompletion.create(
+        model="gpt-4",  # Use "gpt-4" or "gpt-3.5-turbo" for models
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=60,
-        n=1,
-        stop=None,
         temperature=0.7
     )
 
     # Display the generated caption
-    caption = response.choices[0].text.strip()
+    caption = response['choices'][0]['message']['content'].strip()
     st.write(f"Generated Caption: {caption}")
