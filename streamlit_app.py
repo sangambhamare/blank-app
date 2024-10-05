@@ -8,7 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get OpenAI API key from the environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Access the OpenAI API key from Streamlit Secrets
+openai.api_key = st.secrets["openai"]["api_key"]
 
 # Streamlit UI
 st.title("Intelligent Caption Generator")
