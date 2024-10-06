@@ -5,7 +5,6 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
 import numpy as np
 import openai
-import os
 
 # Load the pre-trained MobileNetV2 model
 model = MobileNetV2(weights='imagenet')
@@ -25,7 +24,7 @@ def extract_labels_from_image(img):
 def generate_caption(labels):
     prompt = f"Create a catchy social media caption based on these labels: {', '.join([label[0] for label in labels])}."
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # You can change the model if you want
+        model="gpt-3.5-turbo",  # Change model if needed
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
