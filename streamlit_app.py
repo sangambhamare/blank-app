@@ -12,9 +12,8 @@ uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
     # Display the uploaded image
     st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
-    st.write("Uploaded")
 
-    st.write("Creating a Vision Client")
+    st.timer("Creating a Vision Client...")
 
     # Create a Vision client
     client = vision.ImageAnnotatorClient()
