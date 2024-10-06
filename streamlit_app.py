@@ -13,7 +13,7 @@ if uploaded_file is not None:
     # Display the uploaded image
     st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
 
-    st.timer("Creating a Vision Client...")
+    st.slider("Creating a Vision Client...")
 
     # Create a Vision client
     client = vision.ImageAnnotatorClient()
