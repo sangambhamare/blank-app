@@ -1,9 +1,11 @@
 import streamlit as st
-import cv2
-import tensorflow as tf
-from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
+import io
+from google.cloud import vision
 
-st.title("Image Feature Extractor")
+# Replace with your Google Cloud project ID
+project_id = "vibrant-crawler-437800-c4"
+
+st.title("Image Labeler (Google Cloud Vision API)")
 
 uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
@@ -11,27 +13,17 @@ if uploaded_file is not None:
     # Display the uploaded image
     st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
 
-    # Load and preprocess the image
-    image = cv2.imdecode(uploaded_file.getvalue(), cv2.IMREAD_COLOR)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (224, 224))
-    image = preprocess_input(image)
+    # Create a Vision client
+    client = vision.ImageAnnotatorClient()
 
-    # Create the ResNet50 model
-    model = ResNet50(weights='imagenet', include_top=False)
+    # Read the image file
+    image = vision.Image(content=uploaded_file.getvalue())
 
-    # Extract features
-    features = model.predict(image[None, ...])
+    # Perform label detection
+    response = client.label_detection(image=image)
+    labels = response.label_annotations
 
-    # Display extracted features
-    st.write("## Extracted Features:")
-    st.write(features)
-
-    # Get the label with the highest probability
-    predicted_class = tf.keras.applications.resnet50.decode_predictions(features)[0][0]
-    label = predicted_class[1]
-    probability = predicted_class[2]
-
-    # Display predicted label and probability
-    st.write("## Predicted Label:")
-    st.write(f"Label: {label}, Probability: {probability}")
+    # Display the detected labels
+    st.write("## Detected Labels:")
+    for label in labels:
+        st.write(f"Label: {label.description}, Score: {label.score}")
